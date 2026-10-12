@@ -18,13 +18,13 @@ def download_table():
     download_r.raise_for_status()
 
     # define download path
-    file_path = Path("data/raw/14100287-eng.zip")
-    file_path.parent.mkdir(parents=True, exist_ok=True)
+    zip_path = Path("data/raw/14100287-eng.zip")
+    zip_path.parent.mkdir(parents=True, exist_ok=True)
     # download content
-    file_path.write_bytes(download_r.content)
-    print(f"Successfully downloaded zip to '{file_path}'")
+    zip_path.write_bytes(download_r.content)
+    print(f"Successfully downloaded zip to '{zip_path}'")
 
-    return file_path
+    return zip_path
 
 
 if __name__ == "__main__":
