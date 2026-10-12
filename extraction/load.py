@@ -1,6 +1,8 @@
 import os
 import psycopg
+import zipfile
 from dotenv import load_dotenv
+from pathlib import Path
 
 load_dotenv()
 
@@ -50,7 +52,49 @@ def create_bronze_table(conn):
     """
     conn.execute(query)
 
+def load_bronze(conn, zip_path):
+    # delete all rows on table
+    query = """
+        TRUNCATE bronze.labour_force;
+    """
+    conn.execute(query)
+
+    query = """
+        COPY bronze.labour_force (
+            ref_date,
+            geo,
+            dguid,
+            labour_force_characteristics,
+            gender,
+            age_group,
+            statistics,
+            data_type,
+            uom,
+            uom_id,
+            scalar_factor,
+            scalar_id,
+            vector,
+            coordinate,
+            value,
+            status,
+            symbol,
+            terminated,
+            decimals
+        )
+        FROM STDIN
+        WITH (FORMAT csv, HEADER true)
+    """
+    
+    with conn.cursor() as cur:
+        with cur.copy(query) as copy:
+            with zipfile.ZipFile(zip_path) as z:
+                with z.open("14100287.csv") as f:
+                    while chunk := f.read(1024 * 1024):
+                        copy.write(chunk)
+
 if __name__ == "__main__":
+    zip_path = Path("data/raw/14100287-eng.zip")
     with get_connection() as conn:
         create_bronze_schema(conn)
         create_bronze_table(conn)
+        load_bronze(conn, zip_path)
