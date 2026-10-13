@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: bronze
+    schema: bronze
+    description: "Raw data loaded by extraction/load.py, as published by StatCan."
+    tables:
+      - name: labour_force
+        description: "LFS table 14100287, full refresh every run. All columns as text."

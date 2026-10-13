@@ -1,0 +1,12 @@
+name: labour
+version: "1.0.0"
+profile: labour
+model-paths: ["models"]
+models:
+  labour:
+    silver:
+      +schema: silver
+      +materialized: table
+    gold:
+      +schema: gold
+      +materialized: table
