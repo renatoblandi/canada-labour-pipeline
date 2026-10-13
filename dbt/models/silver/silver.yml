@@ -1,0 +1,86 @@
+version: 2
+
+models:
+  - name: labour_force
+    description: >
+      Cleaned LFS data (StatCan table 14100287).
+      One row per series (vector) per month, same rows as Bronze.
+      Values scaled to real units, empty strings converted to NULL, unused columns dropped.
+      No business filters applied.
+    columns:
+      - name: ref_date
+        description: "Reference month, stored as YYYY-MM"
+        data_tests:
+          - not_null
+      - name: geo
+        description: "Geography: Canada or one of the 10 provinces."
+        data_tests:
+          - not_null
+      - name: labour_force_characteristics
+        description: |
+          Indicator measured.
+          Counts:
+            - Population
+            - Labour force
+            - Employment
+            - Full-time employment
+            - Part-time employment
+            - Unemployment
+          Rates:
+            - Unemployment rate
+            - Participation rate
+            - Employment rate
+        data_tests:
+          - not_null
+      - name: gender
+        description: >
+          Total - Gender, Men+ or Women+.
+          Non-binary persons are distributed into Men+ and Woman+ by StatCan to protect confidentiality.
+        data_tests:
+          - not_null
+      - name: age_group
+        description: >
+          Age group, e.g. '15 years and over' or '25 to 54 years'.
+          Groups overlap ('15 to 24 years' is part of '15 years and over')
+        data_tests:
+        - not_null
+      - name: statistics
+        description: >
+          Type of statistic: 'Estimate' (the value itself) or a standard error
+          (of the estimate, of the month-to-month change or of the year-over-year change).
+          Standard errors only exist for seasonally adjusted data and start in 2001.
+        data_tests:
+          - not_null
+      - name: data_type
+        description: >
+          'Seasonally adjusted', 'Unadjusted' or 'Trend-cycle'.
+          Trend-cycle is a smoothed series available only for total_employment.
+        data_tests:
+          - not_null
+      - name: unit
+        description: "Unit of value after scaling: 'Persons' (counts) or 'Percent' (rates)."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ["Persons", "Percent"]
+      - name: value
+        description: |
+          Real value after applying StatCan's scale factor.
+          Persons: survey estimate rounded to the nearest hundred.
+          Percent: 0 to 100, rounded to one decimal.
+          NULL when the value is not available or suppressed (see status).
+      - name: status
+        description: |
+          Reason why value is NULL:
+          - '..' = not available for the reference period
+          - 'x' = suppressed for confidentiality
+          NULL when value is present.
+      - name: vector
+        description: >
+          StatCan identifier of a time series: one combination of geo, characteristc, gender,
+          age group, statistic and data_type. Together with ref_date, uniquely identifies a row.
+        data_tests:
+          - not_null
+      - name: loaded_at
+        description: "Timestamp of the Bronze load this row came from. Same value for every row of a load."
