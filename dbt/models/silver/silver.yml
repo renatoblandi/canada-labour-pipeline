@@ -9,7 +9,7 @@ models:
       No business filters applied.
     columns:
       - name: ref_date
-        description: "Reference month, stored as YYYY-MM"
+        description: "Reference month, stored as the first day of the month (e.g. 2026-09-01)"
         data_tests:
           - not_null
       - name: geo
@@ -35,15 +35,16 @@ models:
       - name: gender
         description: >
           Total - Gender, Men+ or Women+.
-          Non-binary persons are distributed into Men+ and Woman+ by StatCan to protect confidentiality.
+          Non-binary persons are distributed into Men+ and Women+ by StatCan to protect confidentiality.
         data_tests:
           - not_null
       - name: age_group
         description: >
           Age group, e.g. '15 years and over' or '25 to 54 years'.
-          Groups overlap ('15 to 24 years' is part of '15 years and over')
+          Groups overlap ('15 to 24 years' is part of '15 years and over'),
+          so values must not be summed across age groups.
         data_tests:
-        - not_null
+          - not_null
       - name: statistics
         description: >
           Type of statistic: 'Estimate' (the value itself) or a standard error
@@ -54,7 +55,7 @@ models:
       - name: data_type
         description: >
           'Seasonally adjusted', 'Unadjusted' or 'Trend-cycle'.
-          Trend-cycle is a smoothed series available only for total_employment.
+          Trend-cycle is a smoothed series available only for total employment.
         data_tests:
           - not_null
       - name: unit
@@ -78,7 +79,7 @@ models:
           NULL when value is present.
       - name: vector
         description: >
-          StatCan identifier of a time series: one combination of geo, characteristc, gender,
+          StatCan identifier of a time series: one combination of geo, characteristic, gender,
           age group, statistic and data_type. Together with ref_date, uniquely identifies a row.
         data_tests:
           - not_null
