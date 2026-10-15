@@ -49,3 +49,5 @@ models:
         description: >
           unemployment_rate minus canada_unemployment_rate, in percentage points.
           Negative means lower unemployment than the national rate.
+        data_tests:
+          - not_null
