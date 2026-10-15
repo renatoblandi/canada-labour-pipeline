@@ -1,0 +1,53 @@
+version: 2
+
+models:
+  - name: province_unemployment_monthly
+    description: >
+      Monthly unemployment rate by province for two age groups: 15 years and over (the official headline rate)
+      and 25 to 54 years (core working age). Seasonally adjusted estimates, all genders combined. Includes
+      month-over-month and year-over-year changes and the gap to the national rate.
+      One row per geo, age group and month.
+    columns:
+      - name: ref_date
+        description: "Reference month (first day of the month)."
+        data_tests:
+          - not_null
+      - name: geo
+        description: >
+          Canada or one of the 10 provinces. Canada rows are the national benchmark,
+          so their gap_vs_canada_pp is always 0.
+        data_tests:
+          - not_null
+      - name: age_group
+        description: >
+          '15 years and over' (official headline rate) or
+          '25 to 54 years' (core working age, excludes most students and retirees).
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['15 years and over', '25 to 54 years']
+      - name: unemployment_rate
+        description: >
+          Unemployment rate in percent (0 to 100):
+          unemployed persons as a share of the labour force.
+        data_tests:
+          - not_null
+      - name: mom_change_pp
+        description: >
+          Change from the previous month, in percentage points.
+          NULL for the first month of each series.
+      - name: yoy_change_pp
+        description: >
+          Change from the same month of the previous year, in percentage points.
+          NULL for the first 12 months of each series.
+      - name: canada_unemployment_rate
+        description: "National unemployment rate for the same month and age group."
+        data_tests:
+          - not_null
+      - name: gap_vs_canada_pp
+        description: >
+          unemployment_rate minus canada_unemployment_rate, in percentage points.
+          Negative means lower unemployment than the national rate.
+        data_tests:
+          - not_null
