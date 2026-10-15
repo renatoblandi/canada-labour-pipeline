@@ -23,6 +23,9 @@ StatCan publishes updated Labor Force Survey data on the first Friday of every m
 - Silver: cleaned and typed data, columns renamed, scaling applied, noise dropped
 - Gold: aggregated metrics
 
+## Lineage
+![dbt lineage graph](docs/lineage_graph.png)
+
 ## Design decisions
 
 ### Full refresh load
