@@ -92,9 +92,11 @@ def load_bronze(conn, zip_path):
                     while chunk := f.read(1024 * 1024):
                         copy.write(chunk)
 
-if __name__ == "__main__":
-    zip_path = Path("data/raw/14100287-eng.zip")
+def run_bronze_load(zip_path):
     with get_connection() as conn:
         create_bronze_schema(conn)
         create_bronze_table(conn)
         load_bronze(conn, zip_path)
+
+if __name__ == "__main__":
+    run_bronze_load(Path("data/raw/14100287-eng.zip"))
