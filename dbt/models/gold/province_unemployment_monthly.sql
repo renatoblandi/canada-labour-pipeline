@@ -32,6 +32,7 @@ SELECT
     ) AS mom_change_pp,
     u.unemployment_rate - LAG(u.unemployment_rate, 12) OVER (
         PARTITION BY u.geo, u.age_group
+        ORDER BY u.ref_date
     ) AS yoy_change_pp,
     c.canada_unemployment_rate,
     u.unemployment_rate - c.canada_unemployment_rate AS gap_vs_canada_pp
