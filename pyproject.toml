@@ -1,7 +1,7 @@
 [project]
 name = "canada-labour-pipeline"
 version = "0.1.0"
-description = "Add your description here"
+description = "ELT pipeline for Statistics Canada's Labour Force Survey: Python, Postgres, dbt and Airflow"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
