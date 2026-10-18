@@ -21,10 +21,6 @@ def lfs_pipeline():
         return str(download_table())
 
     @task
-    def download():
-        return str(download_table())
-
-    @task
     def load(zip_path):
         run_bronze_load(Path(zip_path))
 
